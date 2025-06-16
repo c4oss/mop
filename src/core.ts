@@ -5,8 +5,20 @@ import { ValueOrFactory, callOrGet } from "value-or-factory"
 import { ErrorPathComponent, MapError, Mapper, Result } from "./base"
 import { ArrayOrElement, arrayOrElement } from "./internal"
 
-export { isLeft, isRight } from "fp-ts/Either"
+export { fold, isLeft, isRight, toUnion } from "fp-ts/Either"
 export { flow, pipe } from "fp-ts/function"
+
+export function getSuccess<E, A>(either: E.Either<E, A>) {
+    if (E.isRight(either)) {
+        return either.right
+    }
+}
+
+export function getFailure<E, A>(either: E.Either<E, A>) {
+    if (E.isLeft(either)) {
+        return either.left
+    }
+}
 
 /**
  * Returns true if this result is a success.

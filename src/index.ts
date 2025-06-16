@@ -1,4 +1,3 @@
-export { flow } from "fp-ts/function"
 export * from "./array"
 export * from "./base"
 export * from "./base64"
