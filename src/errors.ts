@@ -15,11 +15,11 @@ export const groupErrors = () => mapFail(groupBy(_ => formatPath(_.path)))
 /**
  * Turns the errors into a map of errors, where the key is the formatted path and the value is an array of string for each key.
  */
-export const groupMessages = (formatter: ErrorFormatter = formatError(false)) => flow(groupErrors(), mapLeft(mapObjIndexed(_ => _.map(formatter))))
+export const groupMessages = (formatter: ErrorFormatter = formatError(false)) => flow(groupErrors(), mapLeft(mapObjIndexed(_ => _!.map(formatter))))
 /**
  * Turns the errors into a map of errors, where the key is the formatted path and the value is a single string of all the errors for that key.
  */
-export const combineMessages = (formatter: ErrorFormatter = formatError(false)) => flow(groupErrors(), mapLeft(mapObjIndexed(error => formatter(error) + ".")))
+export const combineMessages = (formatter: ErrorFormatter = formatError(false)) => flow(groupErrors(), mapLeft(mapObjIndexed(error => formatter(error!) + ".")))
 /**
  * Turns the errors into a list of error messages.
  */
