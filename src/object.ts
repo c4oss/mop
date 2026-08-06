@@ -22,7 +22,41 @@ export function rawObject<S extends ObjectSchema>(schema: S) {
 export type ObjectOutput<S extends ObjectSchema> = { [K in keyof S]: OutputType<S[K]> }
 export type ObjectInput<S extends ObjectSchema> = { [K in RequiredKeys<{ [K in keyof S]: InputType<S[K]> }>]: InputType<S[K]> } & { [K in OptionalKeys<{ [K in keyof S]: InputType<S[K]> }>]?: InputType<S[K]> }
 
-export function record<K extends string | number | symbol, V>(key: Mapper<string | number | symbol, K>, value: (key: K) => Mapper<unknown, V>): Mapper<object, Record<K, V>> {
+export function pairs<K, I, V>(key: Mapper<string, K>, value: (key: K) => Mapper<I, V>): Mapper<Record<string, I>, readonly (readonly [K, V])[]> {
+    return flatMap((input: Record<string, I>) => {
+        const entries = Object.entries(input)
+        const mapped = entries.map(([k, v]) => {
+            const mappedKey = exec(k, flow(key, path(k)))
+            if (isLeft(mappedKey)) {
+                return mappedKey
+            }
+            const mappedValue = exec(v, flow(value(mappedKey.right), path(k)))
+            if (isLeft(mappedValue)) {
+                return mappedValue
+            }
+            return success([
+                mappedKey.right,
+                mappedValue.right
+            ] as const)
+        })
+        const separated = separate(mapped)
+        if (separated.left.length > 0) {
+            return failure(separated.left.flat())
+        }
+        return success(separated.right)
+    })
+}
+
+export function record<K extends string | number | symbol, I, V>(key: Mapper<string, K>, value: (key: K) => Mapper<I, V>): Mapper<Record<string, I>, Record<K, V>> {
+    return flow(
+        pairs(key, value),
+        map(pairs => {
+            return Object.fromEntries(pairs) as Record<K, V>
+        })
+    )
+}
+
+export function mappedObject<K extends string | number | symbol, V>(key: Mapper<string | number | symbol, K>, value: (key: K) => Mapper<unknown, V>): Mapper<object, Record<K, V>> {
     return flatMap((input: object) => {
         const entries = Object.entries(input)
         const mapped = entries.map(([k, v]) => {
