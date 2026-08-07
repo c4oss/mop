@@ -1,5 +1,5 @@
 
-import { MapError } from "./base";
+import { MapError } from "./base.js";
 
 export type ErrorFormatter = (errors: MapError | readonly MapError[]) => string
 

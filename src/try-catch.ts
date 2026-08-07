@@ -1,7 +1,7 @@
 import * as E from "fp-ts/Either"
-import { buildError, ErrorFactory } from "./base"
-import { flatMap } from "./core"
-import { testWith } from "./test"
+import { buildError, ErrorFactory } from "./base.js"
+import { flatMap } from "./core.js"
+import { testWith } from "./test.js"
 
 /**
  * Tries to execute a function, catching errors. Returns a result containing the return value of the function.

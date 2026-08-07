@@ -1,5 +1,5 @@
-import { Predicate } from "fp-ts/lib/Predicate"
-import { map } from "./core"
+import { Predicate } from "fp-ts/Predicate"
+import { map } from "./core.js"
 
 /**
  * This performs a validation, but instead of throwing an error it turns the value into undefined if it fails.

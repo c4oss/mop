@@ -2,7 +2,9 @@ import * as E from "fp-ts/Either"
 import { map, mapLeft, toUnion } from "fp-ts/Either"
 import { flow, pipe } from "fp-ts/function"
 import { groupBy, mapObjIndexed, values } from "ramda"
-import { ErrorFormatter, errorAt, formatError, formatPath, mapFail } from "."
+import { mapFail } from "./core.js"
+import { errorAt, formatError, formatPath } from "./formatting.js"
+import { ErrorFormatter } from "./util.js"
 
 /**
  * Throws if there is an error, otherwise returns the value.

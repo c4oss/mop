@@ -1,7 +1,11 @@
-import { flow } from "fp-ts/lib/function";
+import { flow } from "fp-ts/function";
 import { mergeAll } from "ramda";
-import { cast, exec, flattenArray, InputType, map, Mapper, OutputType, typed } from ".";
-import { UnionToIntersection } from "./internal";
+import { InputType, Mapper, OutputType } from "./base.js";
+import { map } from "./core.js";
+import { exec } from "./exec.js";
+import { flattenArray } from "./flatten.js";
+import { UnionToIntersection } from "./internal.js";
+import { cast, typed } from "./types.js";
 
 export type MultiSchema = ReadonlyArray<Mapper<never, object>>
 export type MultiInput<S extends MultiSchema> = UnionToIntersection<{ [K in keyof S]: InputType<S[K]> }[number]>

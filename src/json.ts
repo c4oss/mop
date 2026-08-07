@@ -1,4 +1,7 @@
-import { ErrorFactory, buildError, failure, flatMap, flow, isArray, isArrayArray, isBoolean, isBooleanArray, isNumber, isNumberArray, isObject, isObjectArray, isString, isStringArray, success, tryCatch } from ".";
+import { ErrorFactory, buildError } from "./base.js";
+import { failure, flatMap, flow, success } from "./core.js";
+import { tryCatch } from "./try-catch.js";
+import { isArray, isArrayArray, isBoolean, isBooleanArray, isNumber, isNumberArray, isObject, isObjectArray, isString, isStringArray } from "./types.js";
 
 export type JsonPrimitive = string | number | null | boolean
 export type JsonArray = readonly Json[]

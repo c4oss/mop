@@ -2,14 +2,14 @@
 // Type converters.
 
 import { flow } from "fp-ts/function"
-import { buildError, ErrorFactory } from "./base"
-import { failure, flatMap, map, of, success } from "./core"
-import { tryBoth } from "./experimental"
-import { maybe } from "./optionality"
-import { blankToEmpty, numeric } from "./string"
-import { tryCatch } from "./try-catch"
-import { isNumber, isString } from "./types"
-import { regexFromString } from "./util"
+import { buildError, ErrorFactory } from "./base.js"
+import { failure, flatMap, map, of, success } from "./core.js"
+import { tryBoth } from "./experimental.js"
+import { maybe } from "./optionality.js"
+import { blankToEmpty, numeric } from "./string.js"
+import { tryCatch } from "./try-catch.js"
+import { isNumber, isString } from "./types.js"
+import { regexFromString } from "./util.js"
 
 /**
  * Creates a mapper that converts any value to a boolean using the !! operator.

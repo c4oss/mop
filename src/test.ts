@@ -1,7 +1,9 @@
 import { flow } from "fp-ts/function";
 import { Predicate } from "fp-ts/Predicate";
-import { buildError, ErrorFactory, ErrorInput, failure, flatMap, Mapper, of, split, to1 } from ".";
-import { ArrayOrElement } from "./internal";
+import { buildError, ErrorFactory, ErrorInput, Mapper } from "./base.js";
+import { failure, flatMap, of } from "./core.js";
+import { ArrayOrElement } from "./internal.js";
+import { split, to1 } from "./tuples.js";
 
 /**
  * This is the base of all validators. Performs a test, throws an error if it fails. If it passes, the original value is returned.

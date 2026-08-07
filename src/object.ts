@@ -1,8 +1,15 @@
 
+import { separate } from "fp-ts/Array"
 import { flow } from "fp-ts/function"
-import { separate } from "fp-ts/lib/Array"
 import { mapObjIndexed, pick as ramdaPick } from "ramda"
-import { InputType, Mapper, OutputType, Result, cast, constant, exec, failure, flatMap, flattenObject, isLeft, map, noOp, path, split, success, swap, typed } from "."
+import { InputType, Mapper, OutputType, Result } from "./base.js"
+import { constant, noOp } from "./common.js"
+import { failure, flatMap, isLeft, map, success } from "./core.js"
+import { exec } from "./exec.js"
+import { flattenObject } from "./flatten.js"
+import { path } from "./path.js"
+import { split, swap } from "./tuples.js"
+import { cast, typed } from "./types.js"
 
 type OptionalKeys<S> = { [K in keyof S]: undefined extends S[K] ? K : never }[keyof S]
 type RequiredKeys<S> = { [K in keyof S]: undefined extends S[K] ? never : K }[keyof S]

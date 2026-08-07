@@ -1,6 +1,6 @@
 
-import { ErrorFactory } from "./base";
-import { predicate } from "./test";
+import { ErrorFactory } from "./base.js";
+import { predicate } from "./test.js";
 
 /**
  * Creates a mapper that validates that a number is greater than a specified value.

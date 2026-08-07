@@ -1,11 +1,10 @@
 
-import { flow } from "fp-ts/function";
 import { ValueOrFactory } from "value-or-factory";
-import { array } from "./array";
-import { buildError, ErrorFactory, Result } from "./base";
-import { failure, flatMap, map, of } from "./core";
-import { maybe, maybeOr, maybeOrNull, maybeOrUndefined } from "./optionality";
-import { predicate } from "./test";
+import { array } from "./array.js";
+import { buildError, ErrorFactory, Result } from "./base.js";
+import { failure, flatMap, flow, map, of } from "./core.js";
+import { maybe, maybeOr, maybeOrNull, maybeOrUndefined } from "./optionality.js";
+import { predicate } from "./test.js";
 
 export const typed = <T>(value: Result<T>) => value
 export const typedMaybe = <T>(value: Result<T | null | undefined>) => maybe(typed<T>)(value)

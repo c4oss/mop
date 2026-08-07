@@ -1,8 +1,12 @@
 
 import { separate } from "fp-ts/Array"
 import { flow } from "fp-ts/function"
-import { Result, ResultType, cast, chain, failure, flat, flatMap, map, of, on2, path, typed } from "."
-import { loop } from "./internal"
+import { Result, ResultType } from "./base.js"
+import { chain, failure, flat, flatMap, map, of } from "./core.js"
+import { loop } from "./internal.js"
+import { path } from "./path.js"
+import { on2 } from "./tuples.js"
+import { cast, typed } from "./types.js"
 
 /**
  * Creates a mapper that turns an object of results into a @link Result of an object.

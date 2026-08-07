@@ -1,6 +1,8 @@
 import { flow } from "fp-ts/function"
 import { indexBy } from "ramda"
-import { buildError, ErrorFactory, failure, flatMap, Mapper, of, predicate } from "."
+import { buildError, ErrorFactory, Mapper } from "./base.js"
+import { failure, flatMap, of } from "./core.js"
+import { predicate } from "./test.js"
 
 /**
  * Call the factory function and throw an error if the returned value is undefined.

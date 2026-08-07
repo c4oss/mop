@@ -1,5 +1,5 @@
-import * as E from "fp-ts/lib/Either";
-import { Either } from 'fp-ts/lib/Either';
+import * as E from "fp-ts/Either";
+import { Either } from 'fp-ts/Either';
 import { ValueOrFactory } from "value-or-factory";
 
 /**

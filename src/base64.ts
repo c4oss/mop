@@ -1,5 +1,6 @@
 import { Base64 } from "js-base64"
-import { ErrorFactory, tryCatch } from "."
+import { ErrorFactory } from "./base.js"
+import { tryCatch } from "./try-catch.js"
 
 /**
  * Convert a base64 string to an ID.

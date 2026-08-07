@@ -1,5 +1,5 @@
-import { ErrorPathComponent, MapError } from "."
-import { ArrayOrElement, arrayOrElement } from "./internal"
+import { ErrorPathComponent, MapError } from "./base.js"
+import { ArrayOrElement, arrayOrElement } from "./internal.js"
 
 /**
  * Utility to format an error path.

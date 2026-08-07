@@ -1,6 +1,6 @@
 import { callOrGet, ValueOrFactory } from "value-or-factory"
-import { buildError, ErrorFactory, Mapper, Result } from "./base"
-import { failure, flatMap, map, of, orElse, pipe, success } from "./core"
+import { buildError, ErrorFactory, Mapper, Result } from "./base.js"
+import { failure, flatMap, map, of, orElse, pipe, success } from "./core.js"
 
 /**
  * Returns the same value every time.

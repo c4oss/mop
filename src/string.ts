@@ -2,7 +2,11 @@
 // String
 
 import { flow } from "fp-ts/function";
-import { ErrorFactory, filter, map, maybe, orNull, orUndefined, predicate, req } from ".";
+import { ErrorFactory } from "./base.js";
+import { map } from "./core.js";
+import { filter } from "./filter.js";
+import { maybe, orNull, orUndefined, req } from "./optionality.js";
+import { predicate } from "./test.js";
 
 /**
  * Creates a mapper that trims a string. 

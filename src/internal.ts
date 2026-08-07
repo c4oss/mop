@@ -1,6 +1,8 @@
 import { flow } from "fp-ts/function";
-import { exec, map, Mapper } from ".";
-import { flattenArray } from "./flatten";
+import { Mapper } from "./base.js";
+import { map } from "./core.js";
+import { exec } from "./exec.js";
+import { flattenArray } from "./flatten.js";
 
 /**
  * A union between a type and an array of the type.

@@ -1,5 +1,7 @@
-import { errorAt, ErrorPathComponent, formatPath, mapFail } from "."
-import { arrayOrElement, ArrayOrElement } from "./internal"
+import { ErrorPathComponent } from "./base.js"
+import { errorAt, formatPath } from "./formatting.js"
+import { mapFail } from "./index.js"
+import { arrayOrElement, ArrayOrElement } from "./internal.js"
 
 /**
  * Prepend a path tree to all errors.

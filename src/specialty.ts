@@ -1,8 +1,8 @@
 import { flow } from "fp-ts/function"
-import { buildError, ErrorFactory } from "./base"
-import { noOp } from "./common"
-import { map } from "./core"
-import { predicate } from "./test"
+import { buildError, ErrorFactory } from "./base.js"
+import { noOp } from "./common.js"
+import { map } from "./core.js"
+import { predicate } from "./test.js"
 
 /**
  * A mapper that takes a string as input, and gets the value from LocalStorage.

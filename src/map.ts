@@ -1,10 +1,10 @@
 import { flow } from "fp-ts/function";
-import { ErrorPathComponent, Mapper } from "./base";
-import { chain, map } from "./core";
-import { ArrayOrElement, loop } from "./internal";
-import { path } from "./path";
-import { on2 } from "./tuples";
-import { typed } from "./types";
+import { ErrorPathComponent, Mapper } from "./base.js";
+import { chain, map } from "./core.js";
+import { ArrayOrElement, loop } from "./internal.js";
+import { path } from "./path.js";
+import { on2 } from "./tuples.js";
+import { typed } from "./types.js";
 
 /**
  * Maps every element in a map. The mapper can be determined by the key if necessary.

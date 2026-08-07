@@ -3,6 +3,13 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Build Mop",
+            "runtimeExecutable": "yarn",
+            "runtimeArgs": ["build"],
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Watch Mop",
             "runtimeExecutable": "yarn",
             "runtimeArgs": ["watch"],

@@ -1,7 +1,7 @@
 
-import { ErrorFactory } from "./base"
-import { flow } from "./core"
-import { predicate } from "./test"
+import { ErrorFactory } from "./base.js"
+import { flow } from "./core.js"
+import { predicate } from "./test.js"
 
 /*
 export const is = <I, O extends I>(is: O, error: ErrorFactory<I> = "Must be equal to " + is) => flow(test(_ => _ === is, error), cast<O>)

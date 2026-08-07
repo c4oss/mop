@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "jsx": "react-jsx",
         "strict": true,
         "alwaysStrict": true,
         "allowUnreachableCode": false,
@@ -14,15 +15,13 @@
         "noFallthroughCasesInSwitch": true,
         "useUnknownInCatchVariables": true,
         "exactOptionalPropertyTypes": true,
-        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "nodenext",
+        "module": "nodenext",
         "target": "esnext",
         "declaration": true,
-        "declarationDir": "dist",
-        "emitDeclarationOnly": true,
-        "moduleResolution": "bundler",
-        "skipLibCheck": true
-    },
-    "include": [
-        "src"
-    ]
+        "sourceMap": true,
+        "skipLibCheck": true,
+        "rootDir": "src",
+        "outDir": "dist"
+    }
 }

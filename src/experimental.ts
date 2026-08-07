@@ -1,13 +1,12 @@
 import { separate } from "fp-ts/Array"
 import { flow, pipe } from "fp-ts/function"
-import { ErrorFactory, MapError, buildError, typed } from "."
-import { Mapper, Result } from "./base"
-import { chain, failure, flat, flatMap, map, mapFail, of, orElse, success } from "./core"
-import { exec } from "./exec"
-import { loop } from "./internal"
-import { path } from "./path"
-import { on2 } from "./tuples"
-import { cast } from "./types"
+import { buildError, ErrorFactory, MapError, Mapper, Result } from "./base.js"
+import { chain, failure, flat, flatMap, map, mapFail, of, orElse, success } from "./core.js"
+import { exec } from "./exec.js"
+import { loop } from "./internal.js"
+import { path } from "./path.js"
+import { on2 } from "./tuples.js"
+import { cast, typed } from "./types.js"
 
 /**
  * Transforms each key of an object using a mapper. This is not type safe. We recommend using a map instead.

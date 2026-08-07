@@ -1,9 +1,10 @@
 
 import { flow, pipe } from "fp-ts/function"
-import { exec, typed } from "."
-import { Mapper } from "./base"
-import { flatMap, map } from "./core"
-import { loop } from "./internal"
+import { Mapper } from "./base.js"
+import { flatMap, map } from "./core.js"
+import { exec } from "./exec.js"
+import { loop } from "./internal.js"
+import { typed } from "./types.js"
 
 /**
  * Split a value into itself twice as a tuple.

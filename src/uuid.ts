@@ -1,5 +1,6 @@
 import { parse, stringify } from "uuid"
-import { ErrorFactory, tryCatch } from "."
+import { ErrorFactory } from "./base.js"
+import { tryCatch } from "./try-catch.js"
 
 /**
  * Convert a string to a UUID.

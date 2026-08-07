@@ -1,9 +1,9 @@
+import { mapLeft } from "fp-ts/Either"
 import { flow, pipe } from "fp-ts/function"
-import { mapLeft } from "fp-ts/lib/Either"
-import { MapError, Mapper, Result } from "./base"
-import { of } from "./core"
-import { combineMessages, errorMessagesOnly, errorsOnly, failTo, failToUndefined, groupErrors, groupMessages, messageList, singleErrorMessage, singleErrorMessageOnly, throwError } from "./errors"
-import { ErrorFormatter } from "./util"
+import { MapError, Mapper, Result } from "./base.js"
+import { of } from "./core.js"
+import { combineMessages, errorMessagesOnly, errorsOnly, failTo, failToUndefined, groupErrors, groupMessages, messageList, singleErrorMessage, singleErrorMessageOnly, throwError } from "./errors.js"
+import { ErrorFormatter } from "./util.js"
 
 export const exec = <I, O>(value: I, mapper: (value: Result<I>) => O) => pipe(value, transform(mapper))
 export const execOr = <I, O, F>(value: I, mapper: Mapper<I, O>, otherwise: (e: readonly MapError[]) => Result<F>) => pipe(value, transformOr(mapper, otherwise))

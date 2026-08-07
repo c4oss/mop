@@ -1,11 +1,11 @@
 
 import { flow } from "fp-ts/function"
-import { map, mapFail } from "."
-import { ErrorFactory, Mapper } from "./base"
-import { loop } from "./internal"
-import { path } from "./path"
-import { predicate } from "./test"
-import { cast, typed } from "./types"
+import { ErrorFactory, Mapper } from "./base.js"
+import { map, mapFail } from "./core.js"
+import { loop } from "./internal.js"
+import { path } from "./path.js"
+import { predicate } from "./test.js"
+import { cast, typed } from "./types.js"
 
 /**
  * Maps an array using a mapper.
