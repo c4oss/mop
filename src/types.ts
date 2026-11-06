@@ -1,7 +1,7 @@
 
 import { ValueOrFactory } from "value-or-factory";
 import { array } from "./array.js";
-import { buildError, ErrorFactory, Result } from "./base.js";
+import { error, ErrorFactory, Result } from "./base.js";
 import { failure, flatMap, flow, map, of } from "./core.js";
 import { maybe, maybeOr, maybeOrNull, maybeOrUndefined } from "./optionality.js";
 import { predicate } from "./test.js";
@@ -56,7 +56,7 @@ export const arrayBufferViewType = typed<ArrayBufferView>
 
 export const isNull = (message?: ErrorFactory<unknown>) => predicate<unknown>(_ => _ === null, message)
 export const isUndefined = (message?: ErrorFactory<unknown>) => predicate<unknown>(_ => _ === undefined, message)
-export const isInstanceOf = <T, A extends unknown[]>(con: new (...args: A) => T, message: ErrorFactory<unknown> = "This value must be an instance of " + con.name) => flatMap((_: unknown) => _ instanceof con ? of(_) : failure(buildError(message, _)))
+export const isInstanceOf = <T, A extends unknown[]>(con: new (...args: A) => T, message: ErrorFactory<unknown> = "This value must be an instance of " + con.name) => flatMap((_: unknown) => _ instanceof con ? of(_) : failure(error(message, _)))
 export const isType = <T>(type: string, message: ErrorFactory<unknown> = _ => "This value must be of type " + type) => flow(predicate<unknown>(_ => typeof _ === type, message), cast<T>)
 export const isString = (message?: ErrorFactory<unknown>) => isType<string>("string", message)
 export const isStringArray = (message?: ErrorFactory<unknown>) => flow(isArray(message), array(isString(message)))
@@ -73,7 +73,7 @@ export const isSymbolArray = (message?: ErrorFactory<unknown>) => flow(isArray(m
 export const isArray = (message: ErrorFactory<unknown> = "This value must be an array") => flow(predicate<unknown>(Array.isArray, message), cast<readonly unknown[]>)
 export const isArrayArray = (message?: ErrorFactory<unknown>) => flow(isArray(message), array(isArray(message)))
 export const isArrayOf = <T>(type: string, message: ErrorFactory<unknown> = _ => "This value must be of type " + type) => flow(isArray(message), array(isType<T>(type, message)))
-export const isDate = (message: ErrorFactory<unknown> = "This value must be a date") => flatMap((_: unknown) => _ instanceof Date ? of(_) : failure(buildError(message, _)))
+export const isDate = (message: ErrorFactory<unknown> = "This value must be a date") => flatMap((_: unknown) => _ instanceof Date ? of(_) : failure(error(message, _)))
 export const isDateArray = (message?: ErrorFactory<unknown>) => flow(isArray(message), array(isDate(message)))
-export const isArrayBufferView = (message: ErrorFactory<unknown> = "This value must be an array buffer view") => flatMap((_: unknown) => ArrayBuffer.isView(_) ? of(_) : failure(buildError(message, _)))
+export const isArrayBufferView = (message: ErrorFactory<unknown> = "This value must be an array buffer view") => flatMap((_: unknown) => ArrayBuffer.isView(_) ? of(_) : failure(error(message, _)))
 export const isArrayBufferViewArray = (message?: ErrorFactory<unknown>) => flow(isArray(message), array(isArrayBufferView(message)))

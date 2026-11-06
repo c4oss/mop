@@ -4,7 +4,7 @@ import { flow, pipe } from "fp-ts/function"
 import { groupBy, mapObjIndexed, values } from "ramda"
 import { mapFail } from "./core.js"
 import { errorAt, formatError, formatPath } from "./formatting.js"
-import { ErrorFormatter } from "./util.js"
+import { ErrorFormatter } from "./regex.js"
 
 /**
  * Throws if there is an error, otherwise returns the value.

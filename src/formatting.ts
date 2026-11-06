@@ -1,10 +1,10 @@
-import { ErrorPathComponent, MapError } from "./base.js"
+import { MapError, PathComponent } from "./base.js"
 import { ArrayOrElement, arrayOrElement } from "./internal.js"
 
 /**
  * Utility to format an error path.
  */
-export function formatPath(path?: ArrayOrElement<ErrorPathComponent>) {
+export function formatPath(path?: ArrayOrElement<PathComponent>) {
     if (path === undefined) {
         return ""
     }

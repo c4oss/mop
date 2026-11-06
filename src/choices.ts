@@ -1,17 +1,17 @@
 import { flow } from "fp-ts/function"
 import { indexBy } from "ramda"
-import { buildError, ErrorFactory, Mapper } from "./base.js"
+import { error, ErrorFactory, Mapper } from "./base.js"
 import { failure, flatMap, of } from "./core.js"
 import { predicate } from "./test.js"
 
 /**
  * Call the factory function and throw an error if the returned value is undefined.
  */
-export const lookup = <K, V>(finder: (key: K) => V | undefined, error: ErrorFactory<K> = "This is not a valid choice.") => {
+export const lookup = <K, V>(finder: (key: K) => V | undefined, errorFactory: ErrorFactory<K> = "This is not a valid choice") => {
     return flatMap((input: K) => {
         const found = finder(input)
         if (found === undefined) {
-            return failure(buildError(error, input))
+            return failure(error(errorFactory, input))
         }
         return of(found)
     })
@@ -37,16 +37,16 @@ export const isInSet = <T>(set: Set<T>, error?: ErrorFactory<T>) => predicate(_ 
 /**
  * Narrows a value down to a union of two types.
  */
-export const narrow = <I, A extends I, B extends I>(a: A, b: B, error: ErrorFactory<I> = "This is not a valid option."): Mapper<I, A | B> => flatMap((value: I) => {
+export const narrow = <I, A extends I, B extends I>(a: A, b: B, errorFactory: ErrorFactory<I> = "This is not a valid option."): Mapper<I, A | B> => flatMap((value: I) => {
     if (value === a || value === b) {
         return of(value as A | B);
     }
-    return failure(buildError(error, value))
+    return failure(error(errorFactory, value))
 })
 
-export const narrow3 = <I, A extends I, B extends I, C extends I>(a: A, b: B, c: C, error: ErrorFactory<I> = "This is not a valid option."): Mapper<I, A | B | C> => flatMap((value: I) => {
+export const narrow3 = <I, A extends I, B extends I, C extends I>(a: A, b: B, c: C, errorFactory: ErrorFactory<I> = "This is not a valid option."): Mapper<I, A | B | C> => flatMap((value: I) => {
     if (value === a || value === b || value === c) {
         return of(value as A | B | C);
     }
-    return failure(buildError(error, value))
+    return failure(error(errorFactory, value))
 })

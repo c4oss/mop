@@ -2,11 +2,13 @@
 // String
 
 import { flow } from "fp-ts/function";
-import { ErrorFactory } from "./base.js";
-import { map } from "./core.js";
+import { ErrorFactory, Mapper } from "./base.js";
+import { map, mapFail } from "./core.js";
 import { filter } from "./filter.js";
-import { maybe, orNull, orUndefined, req } from "./optionality.js";
+import { arrayByIndex } from "./index.js";
+import { maybe, maybeNull, maybeUndefined, orNull, orUndefined, req } from "./optionality.js";
 import { predicate } from "./test.js";
+import { typed } from "./types.js";
 
 /**
  * Creates a mapper that trims a string. 
@@ -33,6 +35,14 @@ export const nonBlankString = (error?: ErrorFactory<string | null | undefined>, 
  */
 export const maybeString = () => maybe(blankToEmpty())
 /**
+ * Creates a mapper that turns blank strings into undefined. Lets undefined pass through.
+ */
+export const maybeStringUndefined = () => flow(maybeUndefined(blankToEmpty()), orUndefined)
+/**
+ * Creates a mapper that turns blank strings into undefined. Lets null pass through.
+ */
+export const maybeStringNull = () => flow(maybeNull(blankToEmpty()), orUndefined)
+/**
  * Creates a mapper that turns blank strings into undefined.
  */
 export const maybeStringOrUndefined = () => flow(maybeString(), orUndefined)
@@ -45,8 +55,8 @@ export const maybeStringOrNull = () => flow(maybeString(), orNull)
  * Mappers for start and end with.
  */
 export const startsWith = (match: string, error: ErrorFactory<string> = "Must start with \"" + match + "\"") => predicate(_ => _.startsWith(match), error)
-export const endsWith = (match: string, error: ErrorFactory<string> = "Must end with \"" + match + "\"") => predicate(_ => _.endsWith(match), error)
 export const startsWithCi = (match: string, error: ErrorFactory<string> = "Must start with \"" + match + "\"") => predicate(_ => _.toLowerCase().startsWith(match.toLowerCase()), error)
+export const endsWith = (match: string, error: ErrorFactory<string> = "Must end with \"" + match + "\"") => predicate(_ => _.endsWith(match), error)
 export const endsWithCi = (match: string, error: ErrorFactory<string> = "Must end with \"" + match + "\"") => predicate(_ => _.toLowerCase().endsWith(match.toLowerCase()), error)
 
 /**
@@ -61,11 +71,36 @@ export const uuid = (error: ErrorFactory<string> = "This value must be a UUID") 
  * A mapper that requires a string to be an exact length.
  */
 export const length = (is: number, error: ErrorFactory<string> = "Must be " + is + " characters") => predicate(_ => _.length === is, error)
+
 /**
  * A mapper that requires a string to be a minimum length.
  */
 export const minLength = (is: number, error: ErrorFactory<string> = "Must be at least " + is + " characters") => predicate(_ => _.length >= is, error)
+
 /**
  * A mapper that requires a string to be a maximum length.
  */
 export const maxLength = (is: number, error: ErrorFactory<string> = "Must be at most " + is + " characters") => predicate(_ => _.length <= is, error)
+
+/**
+ * Transforms each line of a string using the provided mapper. If any line fails, the error message will include the line number.
+ */
+export function eachLine<O>(mapper: Mapper<string, O>): Mapper<string, readonly O[]> {
+    return flow(
+        typed<string>,
+        map(string => string.split("\n")),
+        arrayByIndex(index => {
+            return flow(
+                mapper,
+                mapFail(errors => {
+                    return errors.map(error => {
+                        return {
+                            ...error,
+                            message: "Line #" + (index + 1) + ": " + error.message,
+                        }
+                    })
+                })
+            )
+        })
+    )
+}

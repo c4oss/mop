@@ -1,6 +1,6 @@
 import { flow } from "fp-ts/function"
 import { callOrGet, ValueOrFactory } from "value-or-factory"
-import { buildError, ErrorFactory, Mapper, Result } from "./base.js"
+import { error, ErrorFactory, Mapper, Result } from "./base.js"
 import { failure, flatMap, of } from "./core.js"
 import { exec } from "./exec.js"
 import { tryCatch } from "./try-catch.js"
@@ -10,26 +10,26 @@ import { tryCatch } from "./try-catch.js"
  * @param message An optional custom error message.
  * @returns A mapper that returns a value or error if undefined.
  */
-export function req<T = unknown>(error: ErrorFactory<T | undefined | null> = "This value is required") {
+export function req<T = unknown>(errorFactory: ErrorFactory<T | undefined | null> = "This value is required") {
     return flatMap((value: T | undefined | null) => {
         if (value === undefined || value === null) {
-            return failure(buildError(error, value))
+            return failure(error(errorFactory, value))
         }
         return of(value)
     })
 }
-export function reqUndefined<T = unknown>(error: ErrorFactory<T | undefined> = "This value is required") {
+export function reqUndefined<T = unknown>(errorFactory: ErrorFactory<T | undefined> = "This value is required") {
     return flatMap((value: T | undefined) => {
         if (value === undefined) {
-            return failure(buildError(error, value))
+            return failure(error(errorFactory, value))
         }
         return of(value)
     })
 }
-export function reqNull<T = unknown>(error: ErrorFactory<T | null> = "This value is required") {
+export function reqNull<T = unknown>(errorFactory: ErrorFactory<T | null> = "This value is required") {
     return flatMap((value: T | null) => {
         if (value === null) {
-            return failure(buildError(error, value))
+            return failure(error(errorFactory, value))
         }
         return of(value)
     })
@@ -75,6 +75,7 @@ export const maybeNull = <I, O>(mapper: Mapper<I, O>) => flatMap((value: I | nul
     }
     return exec(value, mapper)
 })
+
 export const maybeOr = <I, O>(mapper: Mapper<I, O>, factory: ValueOrFactory<O>) => flow(maybe(mapper), or(factory))
 export const maybeOrUndefined = <I, O>(mapper: Mapper<I, O>) => flow(maybe(mapper), orUndefined)
 export const maybeOrNull = <I, O>(mapper: Mapper<I, O>) => flow(maybe(mapper), orNull)

@@ -1,6 +1,6 @@
 import { flow } from "fp-ts/function";
 import { Predicate } from "fp-ts/Predicate";
-import { buildError, ErrorFactory, ErrorInput, Mapper } from "./base.js";
+import { error, ErrorFactory, ErrorInput, Mapper } from "./base.js";
 import { failure, flatMap, of } from "./core.js";
 import { ArrayOrElement } from "./internal.js";
 import { split, to1 } from "./tuples.js";
@@ -11,15 +11,15 @@ import { split, to1 } from "./tuples.js";
 export const predicate = <T>(predicates: ArrayOrElement<Predicate<T>>, error: ErrorFactory<T> = "This value is invalid.") => flatMap((input: T) => {
     const failures = (Array.isArray(predicates) ? predicates : [predicates]).map(_ => _(input)).filter(_ => !_)
     if (failures.length > 0) {
-        return failure(buildError(error, input))
+        return failure(error(error, input))
     }
     return of(input)
 })
 
 export const test = <T>(testers: ArrayOrElement<(value: T) => ArrayOrElement<ErrorInput>>) => flatMap((input: T) => {
-    const errors = buildError([testers].flat().flatMap(tester => tester(input)), input)
+    const errors = error([testers].flat().flatMap(tester => tester(input)), input)
     if (errors.length > 0) {
-        return failure(buildError(errors, input))
+        return failure(error(errors, input))
     }
     return of(input)
 })

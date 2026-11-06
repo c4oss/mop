@@ -2,14 +2,14 @@
 // Type converters.
 
 import { flow } from "fp-ts/function"
-import { buildError, ErrorFactory } from "./base.js"
+import { error, ErrorFactory } from "./base.js"
 import { failure, flatMap, map, of, success } from "./core.js"
 import { tryBoth } from "./experimental.js"
 import { maybe } from "./optionality.js"
+import { regexFromString } from "./regex.js"
 import { blankToEmpty, numeric } from "./string.js"
 import { tryCatch } from "./try-catch.js"
 import { isNumber, isString } from "./types.js"
-import { regexFromString } from "./util.js"
 
 /**
  * Creates a mapper that converts any value to a boolean using the !! operator.
@@ -19,22 +19,22 @@ export const unknownToBoolean = () => map(_ => !!_);
 /**
  * Creates a mapper that converts a string to an int.
  */
-export const stringToInt = (error: ErrorFactory<[unknown | undefined, string]> = "This value must be numeric") => flow(numeric(v => buildError(error, [undefined, v])), tryCatch(parseInt, error));
+export const stringToInt = (errorFactory: ErrorFactory<[unknown | undefined, string]> = "This value must be numeric") => flow(numeric(v => error(errorFactory, [undefined, v])), tryCatch(parseInt, errorFactory));
 
 /**
  * Creates a mapper that converts a string to a float.
  */
-export const stringToFloat = (error: ErrorFactory<[unknown | undefined, string]> = "This value must be numeric") => flow(numeric(v => buildError(error, [undefined, v])), tryCatch(parseFloat, error));
+export const stringToFloat = (errorFactory: ErrorFactory<[unknown | undefined, string]> = "This value must be numeric") => flow(numeric(v => error(errorFactory, [undefined, v])), tryCatch(parseFloat, errorFactory));
 
 /**
  * Creates a mapper that converts a string or number to an int.
  */
-export const stringOrNumberToInt = (error: ErrorFactory<unknown> = "This value must be a number or a numeric string") => tryBoth(flow(isString(), blankToEmpty(), maybe(flow(numeric(), stringToInt()))), isNumber(), error)
+export const stringOrNumberToInt = (errorFactory: ErrorFactory<unknown> = "This value must be a number or a numeric string") => tryBoth(flow(isString(), blankToEmpty(), maybe(flow(numeric(), stringToInt()))), isNumber(), errorFactory)
 
 /**
  * Creates a mapper that converts a string or number to an float.
  */
-export const stringOrNumberToFloat = (error: ErrorFactory<unknown> = "This value must be a number or a numeric string") => tryBoth(flow(isString(), blankToEmpty(), maybe(flow(numeric(), stringToFloat()))), isNumber(), error)
+export const stringOrNumberToFloat = (errorFactory: ErrorFactory<unknown> = "This value must be a number or a numeric string") => tryBoth(flow(isString(), blankToEmpty(), maybe(flow(numeric(), stringToFloat()))), isNumber(), errorFactory)
 
 /**
  * Creates a mapper that converts a number to a string.
@@ -66,7 +66,7 @@ export const dateToIsoString = () => map((input: Date) => input.toISOString())
  */
 export const stringToDate = () => flatMap((input: string) => {
     if (input.trim() === "") {
-        return failure(buildError("This is not a valid date string", input))
+        return failure(error("This is not a valid date string", input))
     }
     try {
         const parsed = new Date(Date.parse(input))
@@ -75,24 +75,24 @@ export const stringToDate = () => flatMap((input: string) => {
     }
     catch (e) {
         if (e instanceof Error) {
-            return failure(buildError(e.message, input))
+            return failure(error(e.message, input))
         }
-        return failure(buildError("Invalid date.", input))
+        return failure(error("Invalid date.", input))
     }
 })
 
 /**
  * Creates a mapper that converts a string to a regex object.
  */
-export const stringToRegex = (error: ErrorFactory<[unknown, string] | string> = error => "This is not a valid regex pattern" + " (" + error[0] + ")") => flatMap((input: string) => {
+export const stringToRegex = (errorFactory: ErrorFactory<[unknown, string] | string> = error => "This is not a valid regex pattern" + " (" + error[0] + ")") => flatMap((input: string) => {
     try {
         const regex = regexFromString(input)
         if (regex === undefined) {
-            return failure(buildError(error, input))
+            return failure(error(errorFactory, input))
         }
         return of(regex)
     }
     catch (e) {
-        return failure(buildError(error, [e, input]))
+        return failure(error(errorFactory, [e, input]))
     }
 })

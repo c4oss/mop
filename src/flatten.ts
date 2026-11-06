@@ -1,7 +1,7 @@
 
 import { separate } from "fp-ts/Array"
 import { flow } from "fp-ts/function"
-import { Result, ResultType } from "./base.js"
+import { Result } from "./base.js"
 import { chain, failure, flat, flatMap, map, of } from "./core.js"
 import { loop } from "./internal.js"
 import { path } from "./path.js"
@@ -16,7 +16,7 @@ export const flattenObject = <I extends Record<string, Result<unknown>>>() => {
         map(Object.entries),
         loop(() => chain(value => on2(flow(flat(), path(value[0] ?? []))))),
         map(Object.fromEntries),
-        cast<{ [K in keyof I]: ResultType<I[K]> }>
+        cast<{ [K in keyof I]: Result<I[K]> }>
     )
 }
 
@@ -24,9 +24,9 @@ export const flattenObject = <I extends Record<string, Result<unknown>>>() => {
  * Creates a mapper that turns an array of results into a @link Result of an array.
  */
 export const flattenArray = <T>() => flow(
-    typed<readonly Result<T>[]>,
+    typed<Result<T>[]>,
     flatMap(input => {
-        const separated = separate(input as Result<T>[])
+        const separated = separate(input)
         if (separated.left.length > 0) {
             return failure(separated.left.flat())
         }

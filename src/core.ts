@@ -2,9 +2,8 @@ import * as E from "fp-ts/Either"
 import { pipe } from "fp-ts/function"
 import { equals } from "ramda"
 import { ValueOrFactory, callOrGet } from "value-or-factory"
-import { ErrorPathComponent, MapError, Mapper, Result } from "./base.js"
+import { MapError, Mapper, PathComponent, Result } from "./base.js"
 import { ArrayOrElement, arrayOrElement } from "./internal.js"
-
 export { fold, isLeft, isRight, toUnion } from "fp-ts/Either"
 export { flow, pipe } from "fp-ts/function"
 
@@ -85,7 +84,7 @@ export const mapEachError = (func: (i: MapError) => MapError) => mapFail(_ => _.
 /**
  * Maps each error in a transformation failure.
  */
-export const mapErrorAt = (path: ArrayOrElement<ErrorPathComponent>, func: (i: MapError) => MapError) => mapFail(_ => _.map(error => equals(arrayOrElement(error.path ?? []), arrayOrElement(path)) ? func(error) : error))
+export const mapErrorAt = (path: ArrayOrElement<PathComponent>, func: (i: MapError) => MapError) => mapFail(_ => _.map(error => equals(arrayOrElement(error.path ?? []), arrayOrElement(path)) ? func(error) : error))
 
 /**
  * Tap into a mop flow (usually used for logging).

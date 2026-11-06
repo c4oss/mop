@@ -1,4 +1,4 @@
-import { ErrorPathComponent } from "./base.js"
+import { PathComponent } from "./base.js"
 import { errorAt, formatPath } from "./formatting.js"
 import { mapFail } from "./index.js"
 import { arrayOrElement, ArrayOrElement } from "./internal.js"
@@ -6,7 +6,7 @@ import { arrayOrElement, ArrayOrElement } from "./internal.js"
 /**
  * Prepend a path tree to all errors.
  */
-export const path = (paths: ArrayOrElement<ErrorPathComponent>) => mapFail(errors => {
+export const path = (paths: ArrayOrElement<PathComponent>) => mapFail(errors => {
     return errors.map(error => ({ ...error, path: [...arrayOrElement(paths), ...arrayOrElement(error.path ?? []) ?? []] }))
 })
 

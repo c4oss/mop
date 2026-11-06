@@ -20,7 +20,10 @@
         "declaration": true,
         "sourceMap": true,
         "skipLibCheck": true,
-        "rootDir": "src",
+        "rootDirs": [
+            "src",
+            "tests"
+        ],
         "outDir": "dist"
     }
 }

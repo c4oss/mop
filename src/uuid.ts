@@ -5,9 +5,9 @@ import { tryCatch } from "./try-catch.js"
 /**
  * Convert a string to a UUID.
  */
-export const stringToUuid = (error?: ErrorFactory<[unknown, string]>) => tryCatch(parse, error)
+export const stringToUuid = (errorFactory?: ErrorFactory<[unknown, string]> | undefined) => tryCatch(parse, errorFactory)
 
 /**
  * Convert a UUID to a string.
  */
-export const uuidToString = (error?: ErrorFactory<[unknown, Uint8Array]>) => tryCatch(stringify, error)
+export const uuidToString = (errorFactory?: ErrorFactory<[unknown, Uint8Array]> | undefined) => tryCatch(stringify, errorFactory)

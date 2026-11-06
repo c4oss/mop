@@ -1,5 +1,5 @@
 import { callOrGet, ValueOrFactory } from "value-or-factory"
-import { buildError, ErrorFactory, Mapper, Result } from "./base.js"
+import { error, ErrorFactory, Mapper, Result } from "./base.js"
 import { failure, flatMap, map, of, orElse, pipe, success } from "./core.js"
 
 /**
@@ -10,7 +10,7 @@ export const constant = <I, O>(v: ValueOrFactory<O>) => map<I, O>(() => callOrGe
 /**
  * Trigger an error manually.
  */
-export const fail = <I, O>(error: ErrorFactory<I>) => flatMap<I, O>(value => failure(buildError(error, value)))
+export const fail = <I, O>(factory: ErrorFactory<I>) => flatMap<I, O>(value => failure(error(factory, value)))
 
 /**
  * Adds an optional mapper (may be undefined).
