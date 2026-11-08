@@ -5,12 +5,12 @@ import { exec } from "./exec.js";
 import { flattenArray } from "./flatten.js";
 
 /**
- * A union between a type and an array of the type.
+ * Either a single value or a readonly array of values.
  */
 export type ArrayOrElement<T> = T | readonly T[]
 
 /**
- * Converts an array or element to an array.
+ * Wraps a single value in an array. Arrays are returned unchanged.
  */
 export function arrayOrElement<T>(value: ArrayOrElement<T>) {
     if (Array.isArray(value)) {
@@ -20,7 +20,9 @@ export function arrayOrElement<T>(value: ArrayOrElement<T>) {
 }
 
 /**
- * Applies a mapper to each element of an array. This does NOT append anything to the error path. For internal use only. Used for multiple traversals.
+ * Applies a mapper to each element of an array and collects the results. Fails with the errors of every failing element.
+ * This does NOT add the index to the error path. For internal use, as the building block for other traversals.
+ * @param mapper Returns the mapper to use for the element at each index.
  */
 export function loop<I, O>(mapper: (index: number) => Mapper<I, O>) {
     return flow(
@@ -30,6 +32,6 @@ export function loop<I, O>(mapper: (index: number) => Mapper<I, O>) {
 }
 
 /**
- * Converts a union to an intersection.
+ * Converts a union type into an intersection type (`A | B` becomes `A & B`).
  */
 export type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) extends (x: infer R) => any ? R : never

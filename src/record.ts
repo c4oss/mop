@@ -6,7 +6,10 @@ import { path } from "./path.js"
 import { typed } from "./types.js"
 
 /**
- * A mapper that maps all keys and values of an object.
+ * Creates a mapper that transforms every key and value of an object into a list of `[key, value]` pairs.
+ * Errors are prefixed with the original key. Fails with the errors of every failing entry.
+ * @param key The mapper for each key.
+ * @param value Returns the mapper for a value, given its mapped key. Not called if the key fails.
  */
 export function pairs<K, I, V>(key: Mapper<string, K>, value: (key: K) => Mapper<I, V>): Mapper<Record<string, I>, readonly (readonly [K, V])[]> {
     return flatMap((input: Record<string, I>) => {
@@ -33,6 +36,10 @@ export function pairs<K, I, V>(key: Mapper<string, K>, value: (key: K) => Mapper
     })
 }
 
+/**
+ * Creates a mapper that transforms every value of an object, choosing the mapper by key.
+ * Errors are prefixed with the key.
+ */
 export function record<I, V>(value: (key: string) => Mapper<I, V>): Mapper<Record<string, I>, Record<string, V>> {
     return flow(
         pairs(typed<string>, value),

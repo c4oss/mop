@@ -2,7 +2,7 @@ import { MapError, PathComponent } from "./base.js"
 import { ArrayOrElement, arrayOrElement } from "./internal.js"
 
 /**
- * Utility to format an error path.
+ * Formats an error path as a string, e.g. `["list", 0, "id"]` becomes `list[0].id`. An undefined path becomes an empty string.
  */
 export function formatPath(path?: ArrayOrElement<PathComponent>) {
     if (path === undefined) {
@@ -12,7 +12,9 @@ export function formatPath(path?: ArrayOrElement<PathComponent>) {
 }
 
 /**
- * Prints an error into a message string. Replaces {value} with value. Also appends the value to the end if includeValues is true.
+ * Creates an error formatter that joins error messages with ", ".
+ * Replaces the first `{value}` in each message with the error's value.
+ * @param includeValues Also append each error's value in parentheses.
  */
 export function formatError(includeValues = false) {
     return (errors: MapError | readonly MapError[]) => {
@@ -23,7 +25,7 @@ export function formatError(includeValues = false) {
 }
 
 /**
- * Constructs a prefix sentence referencing an error path.
+ * Prefixes a message with the path it applies to (`Error(s) at <path>: <message>`). An empty path returns the message unchanged.
  */
 export function errorAt(path: string, message: string) {
     if (path === "") {

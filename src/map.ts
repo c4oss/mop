@@ -7,7 +7,9 @@ import { on2 } from "./tuples.js";
 import { typed } from "./types.js";
 
 /**
- * Maps every element in a map. The mapper can be determined by the key if necessary.
+ * Creates a mapper that transforms every value in a `Map`, keeping the keys.
+ * @param mapper Returns the mapper to use for the value at each key.
+ * @param keyToPath Converts a key into the error path prefix for that entry.
  */
 export function onEach<I, O, K>(mapper: (key: K) => Mapper<I, O>, keyToPath: (key: K) => ArrayOrElement<PathComponent>) {
     return flow(

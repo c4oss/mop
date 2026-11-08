@@ -9,7 +9,8 @@ import { on2 } from "./tuples.js"
 import { cast, typed } from "./types.js"
 
 /**
- * Creates a mapper that turns an object of results into a @link Result of an object.
+ * Creates a mapper that turns an object of results into a result of an object.
+ * Fails with the errors of every failing key, each prefixed with its key.
  */
 export const flattenObject = <I extends Record<string, Result<unknown>>>() => {
     return flow(
@@ -21,7 +22,8 @@ export const flattenObject = <I extends Record<string, Result<unknown>>>() => {
 }
 
 /**
- * Creates a mapper that turns an array of results into a @link Result of an array.
+ * Creates a mapper that turns an array of results into a result of an array.
+ * Fails with the errors of every failing element. Paths are left unchanged.
  */
 export const flattenArray = <T>() => flow(
     typed<Result<T>[]>,

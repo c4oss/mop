@@ -9,7 +9,8 @@ import { on2 } from "./tuples.js"
 import { cast, typed } from "./types.js"
 
 /**
- * Transforms each key of an object using a mapper. This is not type safe. We recommend using a map instead.
+ * Transforms each value of an object, choosing the mapper by key. Errors are prefixed with the key.
+ * This is not type safe. We recommend using a map instead.
  */
 export function onEachKey<I, O, K extends string | number>(mapper: (key: K) => Mapper<I, O>) {
     return flow(
@@ -22,6 +23,11 @@ export function onEachKey<I, O, K extends string | number>(mapper: (key: K) => M
     )
 }
 
+/**
+ * Creates a mapper that runs every mapper on the input and returns the first successful output.
+ * Every mapper runs, even after one succeeds.
+ * @param errorFactory The error to use if all mappers fail. Receives `[input, errors from every mapper]`.
+ */
 export const tryAll = <I, O>(mappers: Mapper<I, O>[], errorFactory: ErrorFactory<[I, readonly MapError[]]>) => flatMap((input: I) => {
     const results = mappers.map(_ => _(of(input)))
     const separated = separate(results)
@@ -33,7 +39,8 @@ export const tryAll = <I, O>(mappers: Mapper<I, O>[], errorFactory: ErrorFactory
 })
 
 /**
- * Tries two mappers, just needs one to succeed.
+ * Creates a mapper that runs `a`, and if it fails, runs `b` on the original value. Only one needs to succeed.
+ * @param errorFactory The error to use if both fail. Receives `[input, errors from a and b]`.
  */
 export const tryBoth = <I, A, B>(a: Mapper<I, A>, b: Mapper<I, B>, errorFactory: ErrorFactory<[I, readonly MapError[]]>) => chain((value: I) => {
     return flow(
@@ -42,6 +49,11 @@ export const tryBoth = <I, A, B>(a: Mapper<I, A>, b: Mapper<I, B>, errorFactory:
         mapFail(errors => error(errorFactory, [value, errors]))
     )
 })
+
+/**
+ * Creates a mapper that runs `a` and then `detour` on its output. If `a` fails, runs `b` on the original value instead.
+ * Failures from `detour` or `b` are returned as-is.
+ */
 export const tryDetour = <I, A, B, C>(a: Mapper<I, A>, detour: Mapper<A, C>, b: Mapper<I, B>) => chain((input: I) => {
     return flow(
         a,

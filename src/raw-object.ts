@@ -6,10 +6,14 @@ import { exec } from "./exec.js"
 import { ObjectInput, ObjectSchema } from "./object.js"
 import { cast, typed } from "./types.js"
 
+/**
+ * The output of `rawObject`: a result for each key of the schema.
+ */
 export type RawObjectOutput<S extends ObjectSchema> = { [K in keyof S]: Result<S[K]> }
 
 /**
- * Convert an object to an object of results.
+ * Creates a mapper that runs each schema mapper on the matching key of the input, producing an object of results.
+ * Does not fail by itself. Use `flattenObject` to combine the results (as `object` does).
  */
 export function rawObject<S extends ObjectSchema>(schema: S) {
     return flow(

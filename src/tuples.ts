@@ -7,51 +7,53 @@ import { loop } from "./internal.js"
 import { typed } from "./types.js"
 
 /**
- * Split a value into itself twice as a tuple.
+ * Creates a mapper that turns a value into a tuple of the value twice: `[value, value]`.
  */
 export const clone = <I>() => map((_: I) => [_, _] as const)
 
 /**
- * Split a value into a tuple using another mapper on the second half only.
+ * Creates a mapper that turns a value into `[value, mapper output]`, so the original is kept alongside the output.
  */
 export const split = <I, O>(mapper: Mapper<I, O>) => flow(clone<I>(), on2(mapper))
 
 /**
- * Map a value using two mappers, split the result into a tuple.
+ * Creates a mapper that runs two mappers on the same value and returns both outputs as a tuple.
  */
 export const both = <IA, IB, OA, OB>(mapper1: Mapper<IA, OA>, mapper2: Mapper<IB, OB>) => flow(clone<IA & IB>(), on1(mapper1), on2(mapper2))
 
 /**
- * Swaps a tuple's elements.
+ * Creates a mapper that swaps the two elements of a tuple.
  */
 export const swap = <A, B>() => map((_: readonly [A, B]) => [_[1], _[0]] as const)
 
 /**
- * Turns a tuple into its first value.
+ * Creates a mapper that returns the first element of a tuple.
  */
 export const to1 = <A, B>() => map((_: readonly [A, B]) => _[0])
 
 /**
- * Turns a tuple into its second value.
+ * Creates a mapper that returns the second element of a tuple.
  */
 export const to2 = <A, B>() => map((_: readonly [A, B]) => _[1])
 
 /**
- * Maps the first half of a tuple only. Leaves the second intact.
+ * Creates a mapper that transforms only the first element of a tuple. The second is left unchanged.
  */
 export const on1 = <A, B, O>(mapper: Mapper<A, O>) => flow(typed<readonly [A, B]>, flatMap(value => pipe(exec(value[0], mapper), map(_ => [_, value[1]] as const))))
 
-/** 
- * Maps the second half of a tuple only. Leaves the first intact.
+/**
+ * Creates a mapper that transforms only the second element of a tuple. The first is left unchanged.
  */
 export const on2 = <A, B, O>(mapper: Mapper<B, O>) => flow(typed<readonly [A, B]>, flatMap(value => pipe(exec(value[1], mapper), map(_ => [value[0], _] as const))))
 
 /**
- * Maps the first half of a tuple array only. Leaves the second intact.
+ * Creates a mapper that transforms the first element of each tuple in an array, choosing the mapper by index.
+ * Errors are not prefixed with the index.
  */
 export const on1s = <A, B, O>(mapper: (index: number) => Mapper<A, O>) => flow(typed<(readonly [A, B])[]>, loop(index => on1(mapper(index))))
 
 /**
- * Maps the second half of a tuple array only. Leaves the first intact.
+ * Creates a mapper that transforms the second element of each tuple in an array, choosing the mapper by index.
+ * Errors are not prefixed with the index.
  */
 export const on2s = <A, B, O>(mapper: (index: number) => Mapper<B, O>) => flow(typed<(readonly [A, B])[]>, loop(index => on2(mapper(index))))
