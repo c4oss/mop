@@ -27,7 +27,6 @@ export type StrictObjectOutput<S extends ObjectSchema> = { readonly [K in keyof 
  */
 export type ObjectOutput<S extends ObjectSchema> = { readonly [K in keyof S]: OutputType<S[K]> } & { readonly [key: string]: unknown }
 
-//TODO if ANY key = type O, what about the keys in ObjectSchema?
 /**
  * The output type of a loose object schema: the schema's keys, plus any other keys of type `O`.
  */
@@ -58,5 +57,3 @@ export function strictObject<S extends ObjectSchema>(schema: S) {
         cast<StrictObjectOutput<S>>
     )
 }
-
-//TODO loose object?
